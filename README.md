@@ -1,6 +1,6 @@
 REDDIT APP
 
-![Alt Text](https://github.com/green-fox-academy/marcoff90/blob/master/week-09/day-04/src/main/resources/static/img/readmegif/IMG_0767.gif)
+![Alt Text](https://github.com/marcoff90/bit-different-reddit/blob/master/src/main/resources/static/img/readmegif/IMG_0767.gif)
 
 - in all views - if the user is logged in, the username is rendered in the right corner
 
