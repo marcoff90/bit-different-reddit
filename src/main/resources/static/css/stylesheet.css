@@ -1,0 +1,56 @@
+.fa-thumbs-up {
+  color: red;
+}
+
+.fa-thumbs-down {
+  color: grey;
+}
+
+#post-down {
+  color: darkslategray;
+}
+
+#post-up {
+  color: white;
+}
+
+.fa-thumbs-up:hover {
+  color: green;
+}
+
+.fa-thumbs-down:hover {
+  color: black;
+}
+
+#post-down:hover {
+  color: cyan;
+}
+
+#post-up:hover {
+  color: lime;
+}
+
+.even {
+  background-color: #E3E0DF;
+  color: #454241;
+}
+
+.comment {
+  color: #ac5353;
+}
+
+.username {
+  color: #800000;
+}
+
+.fa-reply {
+  color: #54ABAB;
+}
+
+.show-comments {
+  color: #54ABAB;
+}
+
+.comment:hover {
+  color: red;
+}

@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="layout/layout :: layout(~{::title}, ~{::section})">
+<title>Comments</title>
+
+<section>
+
+  <div class="row text-center justify-content-center mx-auto" id="top">
+    <div class="alert alert-danger" role="alert" th:if="${notLoggedInUserVoting}">
+      <strong>Only registered users can vote on comments!</strong>
+    </div>
+  </div>
+
+  <div class="row text-center justify-content-center mx-auto">
+    <div class="alert alert-danger" role="alert" th:if="${didUserAlreadyDownvoted}">
+      <strong>You already downvoted this comment!</strong>
+    </div>
+  </div>
+
+  <div class="row text-center justify-content-center mx-auto">
+    <div class="alert alert-danger" role="alert" th:if="${didUserAlreadyUpVoted}">
+      <strong>You already upvoted this comment!</strong>
+    </div>
+  </div>
+
+  <div class="row text-center justify-content-center mx-auto">
+    <div class="alert alert-success" role="alert" th:if="${wasCommentAdded}">
+      <strong>You added a new Comment!</strong>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-10">
+    </div>
+    <div class="col-2 d-flex align-items-center">
+
+      <img th:if="${user != null}"
+           class="rounded-circle shadow-1-strong me-3 ajax"
+           th:attr="src=${user.getAvatar()},title=${user.getAvatar()},alt=${user.getAvatar()}"
+           alt="avatar"
+           width="65"
+           height="65"
+      />
+
+      <h6 class="g-2 text-right"
+          th:text="${user != null} ? ${user.getUsername()}"></h6>
+    </div>
+  </div>
+
+  <h1 class="display-3 text-center"><img th:src="@{/img/reddit_header.webp}"
+                                         src="img/reddit_header.webp" width="60"
+                                         height="75"
+                                         class="d-inline-block align-top"
+                                         alt=""> Bit Different Reddit</h1>
+
+  <div class="row border border-light mb-2 g-1 rounded bg-light justify-content-center rounded">
+    <table class="table text-light rounded">
+      <thead>
+      <tr class="text-dark">
+        <th scope="col" class="text-center">Votes</th>
+        <th scope="col">Post</th>
+        <th scope="col">Posted</th>
+        <th scope="col">Posted by</th>
+        <th scope="col"></th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr class="bg-danger align-middle">
+        <td class="text-center" th:text="${post.getVotes()}">Mark</td>
+        <td><a class="link-light" th:href="${post.getUrl()}"
+               th:text="${post.getDescription()}"></a>
+        </td>
+        <td th:text="${post.getElapsedTime()}"></td>
+        <td th:text="${post.getUserName()}"></td>
+        <th scope="col" class="text-center"><a th:href="@{'/'}" th:text="'Back to all posts'"
+                                               class="link-light"></a></th>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <section style="background-color: #F5F5F5;" class="rounded">
+
+    <div class="container my-2 py-2 text-dark rounded">
+      <div class="row">
+        <div class="col-4"></div>
+
+        <div class="col-4 justify-content-center">
+          <h5 class="text-danger text-center mt-1">Top 3 Comments</h5>
+        </div>
+
+        <div class="col-4 justify-content-end">
+          <button type="button" class="btn btn-outline-danger" data-mdb-toggle="modal"
+                  data-mdb-target="#exampleModal">
+            Add comment
+          </button>
+
+          <div class="modal fade" id="exampleModal" tabindex="-1"
+               aria-labelledby="exampleModalLabel"
+               aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="text-center" id="exampleModalLabel">Add a comment</h5>
+                  <button type="button" class="btn-close" data-mdb-dismiss="modal"
+                          aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+
+                  <form th:action="@{/{id}/comments(id = ${post.getId()})}" th:method="post"
+                        class="needs-validation" novalidate>
+
+                    <div class="form-group my-3 text-center has-validation">
+                      <input type="text" class="form-control" name="description" id="description"
+                             placeholder="What's your view?" required>
+                    </div>
+                    <div class="text-center">
+                      <button type="submit" class="btn btn-outline-danger mb-2">Add Comment</button>
+                    </div>
+                  </form>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-danger" data-mdb-dismiss="modal">Close
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container my-2 py-2 text-dark rounded">
+      <div class="row d-flex justify-content-center">
+        <div class="col-md-11 col-lg-9 col-xl-7">
+          <div class="d-flex flex-start mb-4" th:each="commentTop3, iterStat : ${topThreeComments}">
+            <div th:if="${commentTop3.getUser() != null}">
+              <img
+                  class="rounded-circle shadow-1-strong me-3 ajax"
+                  th:attr="src=${commentTop3.getUser().getAvatar()},title=${commentTop3.getUser().getAvatar()},alt=${commentTop3.getUser().getAvatar()}"
+                  alt="avatar"
+                  width="65"
+                  height="65"
+              />
+            </div>
+            <div th:if="${commentTop3.getUser() == null}" th:each="avatar : ${T(com.greenfox.reddit.enums.Avatar).values()}">
+              <img
+                  class="rounded-circle shadow-1-strong me-3 ajax"
+                  th:attr="src=${avatar.label},
+                    title=${avatar.label},
+                    alt=${avatar.label}"
+                  alt="avatar"
+                  width="65"
+                  height="65"
+              />
+            </div>
+
+            <div class="card w-100">
+              <div class="card-body p-2" th:class="${iterStat.odd} ? 'odd card-body p-2 rounded'">
+                <div class="card-body p-2"
+                     th:class="${iterStat.even} ? 'even card-body p-2 rounded'">
+                  <div class="">
+                    <div class="row justify-content-between">
+                      <div class="col-8">
+                        <h5 class="username" th:text="${commentTop3.getUserName()}">Johny Cash</h5>
+                      </div>
+                      <div class="col-4">
+                        <p class="small comment text-right" th:text="${commentTop3.getElapsedTime()}">3
+                          hours
+                          ago</p>
+                      </div>
+                    </div>
+                    <p class="comment" th:text="${commentTop3.getDescription()}"></p>
+                    <p class="small text-muted" th:text="'Votes: ' + ${commentTop3.getVotes()}"></p>
+                    <div class="d-flex justify-content-between align-items-center">
+                      <div class="d-flex align-items-center">
+                        <p class="small text-muted mb-0 g-2">Upvote?&ensp;</p>
+                        <a th:href="@{/{id}/{commentId}/upvote(id = ${post.getId()}, commentId = ${commentTop3.getId()})}"
+                           class="link-muted me-2"
+                        ><i class="fas fa-thumbs-up me-1"></i></a>
+                        <p class="small text-muted mb-0 g-2">&ensp;Downvote?&ensp;</p>
+                        <a th:href="@{/{id}/{commentId}/downvote(id = ${post.getId()}, commentId = ${commentTop3.getId()})}"
+                           class="link-muted"
+                        ><i class="fas fa-thumbs-down me-1"></i></a
+                        >
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="container my-2 py-2 text-dark rounded">
+        <div th:if="${otherComments != null}" class="">
+          <div class="text-center">
+            <button
+                class="btn btn-danger"
+                type="button"
+                data-mdb-toggle="collapse"
+                data-mdb-target="#collapseExample"
+                aria-expanded="false"
+                aria-controls="collapseExample"
+            >
+              More comments
+            </button>
+          </div>
+
+          <div class="collapse mt-3" id="collapseExample">
+            <div class="row d-flex justify-content-center">
+              <div class="col-md-11 col-lg-9 col-xl-7">
+                <div class="d-flex flex-start mb-4"
+                     th:each="otherComment, iterStat : ${otherComments}">
+                  <div th:if="${otherComment.getUser() != null}">
+                    <img
+                        class="rounded-circle shadow-1-strong me-3 ajax"
+                        th:attr="src=${otherComment.getUser().getAvatar()},title=${otherComment.getUser().getAvatar()},alt=${otherComment.getUser().getAvatar()}"
+                        alt="avatar"
+                        width="65"
+                        height="65"
+                    />
+                  </div>
+                  <div th:if="${otherComment.getUser() == null}" th:each="avatar : ${T(com.greenfox.reddit.enums.Avatar).values()}">
+                    <img
+                        class="rounded-circle shadow-1-strong me-3 ajax"
+                        th:attr="src=${avatar.label},
+                    title=${avatar.label},
+                    alt=${avatar.label}"
+                        alt="avatar"
+                        width="65"
+                        height="65"
+                    />
+                  </div>
+
+                  <div class="card w-100">
+                    <div class="card-body p-2"
+                         th:class="${iterStat.odd} ? 'even card-body p-2 rounded'">
+                      <div class="card-body p-2"
+                           th:class="${iterStat.even} ? 'odd card-body p-2 rounded'">
+                        <div class="">
+                          <div class="row justify-content-between">
+                            <div class="col-8">
+                              <h5 class="username" th:text="${otherComment.getUserName()}"></h5>
+                            </div>
+                            <div class="col-4">
+                              <p class="small comment text-right"
+                                 th:text="${otherComment.getElapsedTime()}">
+                                3
+                                hours
+                                ago</p>
+                            </div>
+                          </div>
+                          <p class="comment" th:text="${otherComment.getDescription()}"></p>
+                          <p class="small text-muted" th:text="'Votes: ' + ${otherComment.getVotes()}"></p>
+                          <div class="d-flex justify-content-between align-items-center">
+                            <div class="d-flex align-items-center">
+                              <p class="small text-muted mb-0 g-2">Upvote?&ensp;</p>
+                              <a th:href="@{/{id}/{commentId}/upvote(id = ${post.getId()}, commentId = ${otherComment.getId()})}"
+                                 class="link-muted me-2"
+                              ><i class="fas fa-thumbs-up me-1"></i></a>
+                              <p class="small text-muted mb-0 g-2">&ensp;Downvote?&ensp;</p>
+                              <a th:href="@{/{id}/{commentId}/downvote(id = ${post.getId()}, commentId = ${otherComment.getId()})}"
+                                 class="link-muted"
+                              ><i class="fas fa-thumbs-down me-1"></i></a
+                              >
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="text-center">
+                  <a class="btn btn-danger" href="#top" role="button">Back to Top</a>
+                </div>
+
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <!--Comments in table with pagination-->
+
+        <!--    <div class="row border border-danger my-3 mx-5 g-1 rounded bg-light justify-content-center rounded">-->
+        <!--      <table class="table table-striped table-responsive rounded" id="myTable">-->
+        <!--        <thead>-->
+        <!--        <tr>-->
+        <!--          <th scope="col" class="text-center">Votes</th>-->
+        <!--          <th scope="col" class="text-center">Upvote/DownVote</th>-->
+        <!--          <th scope="col">Comment</th>-->
+        <!--          <th scope="col">Posted</th>-->
+        <!--          <th scope="col">Posted by</th>-->
+        <!--        </tr>-->
+        <!--        </thead>-->
+        <!--        <tbody>-->
+        <!--        <tr class="align-middle" th:each="comment : ${comments}">-->
+        <!--          <td class="text-center" th:text="${comment.getVotes()}">Mark</td>-->
+
+        <!--          <td class="text-center">-->
+        <!--            <a th:href="@{/{id}/{commentId}/upvote(id = ${post.getId()}, commentId = ${comment.getId()})}">-->
+        <!--              <img alt="UpVote" title="UpVote"-->
+        <!--                   th:src="@{/img/arrow_up.png}" th:width="20" th:height="20"/></a>&#9-->
+        <!--            <a th:href="@{/{id}/{commentId}/downvote(id = ${post.getId()}, commentId = ${comment.getId()})}"><img alt="DownVote"-->
+        <!--                                                                                                                  title="DownVote"-->
+        <!--                                                                                                                  th:src="@{/img/arrow_down.png}"-->
+        <!--                                                                                                                  th:width="20"-->
+        <!--                                                                                                                  th:height="20"/></a>-->
+        <!--          </td>-->
+        <!--          <td th:text="${comment.getDescription()}"></td>-->
+        <!--          <td th:text="${comment.getElapsedTime()}"></td>-->
+        <!--          <td th:text="${comment.getUserName()}"></td>-->
+        <!--        </tr>-->
+        <!--        </tbody>-->
+        <!--      </table>-->
+        <!--    </div>-->
+      </div>
+    </div>
+  </section>
+</section>

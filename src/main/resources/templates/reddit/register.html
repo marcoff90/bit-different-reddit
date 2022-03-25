@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="layout/layout :: layout(~{::title}, ~{::section})">
+<title>Register</title>
+
+<section>
+
+  <div class="row text-center justify-content-center mx-auto">
+    <div class="alert alert-danger" role="alert" th:if="${existingUsername}">
+      <strong>This username is already used!</strong>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-10">
+    </div>
+    <div class="col-2 d-flex align-items-center">
+
+      <img th:if="${user != null}"
+           class="rounded-circle shadow-1-strong me-3 ajax"
+           th:attr="src=${user.getAvatar()},title=${user.getAvatar()},alt=${user.getAvatar()}"
+           alt="avatar"
+           width="65"
+           height="65"
+      />
+
+      <h6 class="g-2 text-right"
+          th:text="${user != null} ? ${user.getUsername()}"></h6>
+    </div>
+  </div>
+
+  <section style="background-color: #F5F5F5;">
+    <div class="container my-2 py-2 text-dark">
+      <div class="row d-flex justify-content-center">
+        <div class="col-md-10 col-lg-8 col-xl-6">
+          <div class="card">
+            <div class="card-body p-4">
+              <div class="d-flex flex-start w-100">
+                <div class="w-100">
+                  <h5 class="text-center text-danger">Register to Reddit</h5>
+                  <form th:action="@{'/register'}" th:method="post" class="needs-validation"
+                        novalidate>
+
+                    <div class="form-group my-3 text-center has-validation">
+                      <label for="username" class="text-danger mb-2"><strong>Choose your
+                        username</strong></label>
+                      <input type="text" class="form-control" name="username" id="username"
+                             placeholder="Your username" required pattern="^[a-zA-Z0-9_.-]*$">
+                      <label for="username" class="small text-muted mb-2">Username must contain only
+                        letters,
+                        digits. Allowed characters dash, underscore and point. </label>
+                    </div>
+
+                    <div class="form-group my-3 text-center has-validation">
+                      <label for="password" class="text-danger mb-2"><strong>Choose a strong
+                        password</strong></label>
+                      <input type="password" class="form-control" name="password" id="password"
+                             placeholder="password" required
+                             pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$">
+                      <label for="username" class="small text-muted mb-2">Minimum eight characters,
+                        at least one letter and one number.</label>
+                      <br>
+                      <label for="avatar" class="text-danger mb-2 text-center"><strong>Choose an avatar</strong></label>
+
+                    </div>
+                    <div class="d-flex justify-content-between mx-3 my-1">
+
+                      <input type="image" id="avatar" name="avatar" value="/img/avatars/beard.png" src="img/avatars/beard.png" width="65" height="65" alt="avatar"/>
+                      <input type="image" id="avatar1" name="avatar" value="/img/avatars/avatar.png" src="img/avatars/avatar.png" width="65" height="65" alt="avatar"/>
+                      <input type="image" id="avatar2" name="avatar" value="/img/avatars/gamer.png" src="img/avatars/gamer.png" width="65" height="65" alt="avatar"/>
+                      <input type="image" id="avatar3" name="avatar" value="/img/avatars/girl.png" src="img/avatars/girl.png" width="65" height="65" alt="avatar"/>
+                      <input type="image" id="avatar4" name="avatar" value="/img/avatars/hacker.png" src="img/avatars/hacker.png" width="65" height="65" alt="avatar"/>
+
+                    </div>
+                    <div class="d-flex justify-content-between mx-5 my-2">
+                      <input type="image" id="avatar5" name="avatar" value="/img/avatars/man.png" src="img/avatars/man.png" width="65" height="65" alt="avatar"/>
+                      <input type="image" id="avatar6" name="avatar" value="/img/avatars/man-2.png" src="img/avatars/man-2.png" width="65" height="65" alt="avatar"/>
+                      <input type="image" id="avatar7" name="avatar" value="/img/avatars/monster.png" src="img/avatars/monster.png" width="65" height="65" alt="avatar"/>
+                      <input type="image" id="avatar8" name="avatar" value="/img/avatars/woman.png" src="img/avatars/woman.png" width="65" height="65" alt="avatar"/>
+                    </div>
+                    <div class="text-center">
+                      <label for="avatar" class="small text-muted mb-2">By clicking on the picture you're submitting your registration</label>
+                    </div>
+                    <div class="text-center mt-4">
+
+                      <button type="submit" class="btn btn-outline-danger mb-2">Add</button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</section>
